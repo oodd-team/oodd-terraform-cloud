@@ -1,28 +1,11 @@
-# resource "aws_route53_record" "dev_api" {
-#   zone_id = aws_route53_zone.main.zone_id
-#   name    = "api-dev.oodd.today"
-#   type    = "A"
-#   alias {
-#     name                   = aws_lb.dev_alb.dns_name
-#     zone_id                = aws_lb.dev_alb.zone_id
-#     evaluate_target_health = true
-#   }
-# }
-
-# resource "aws_route53_record" "prod_api" {
-#   zone_id = aws_route53_zone.main.zone_id
-#   name    = "api.oodd.today"
-#   type    = "A"
-#   alias {
-#     name                   = aws_lb.prod_alb.dns_name
-#     zone_id                = aws_lb.prod_alb.zone_id
-#     evaluate_target_health = true
-#   }
-# }
-
 # 기존에 있던 존 가져오기
 data "aws_route53_zone" "prod_zone" {
   name = "oodd.today."
+}
+
+data "aws_acm_certificate" "server_cert"{
+  domain = "api.oodd.today"
+  provider = aws
 }
 
 data "aws_acm_certificate" "prod_cert" {
@@ -50,6 +33,32 @@ resource "aws_route53_record" "oodd_today" {
   }
 
   depends_on = [aws_cloudfront_distribution.frontend_prod_cf]
+}
+
+# Route53에 서브도메인 레코드 생성: api.oodd.today
+resource "aws_route53_record" "api_record" {
+  zone_id = data.aws_route53_zone.prod_zone.zone_id
+  name    = "api.oodd.today"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.nestjs_alb.dns_name
+    zone_id                = aws_lb.nestjs_alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
+# Route53에 서브도메인 레코드 생성: new-api-dev.oodd.today
+resource "aws_route53_record" "new_api_dev_record" {
+  zone_id = data.aws_route53_zone.prod_zone.zone_id
+  name    = "new-api-dev.oodd.today"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.nestjs_alb.dns_name
+    zone_id                = aws_lb.nestjs_alb.zone_id
+    evaluate_target_health = true
+  }
 }
 
 # resource "aws_route53_record" "dev_frontend" {
