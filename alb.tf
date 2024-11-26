@@ -4,7 +4,7 @@ resource "aws_lb" "nestjs_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  
+  preserve_host_header = true
   subnets = local.subnet_ids
 
   tags = {
