@@ -49,7 +49,7 @@ resource "aws_security_group" "dev_sg" {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = local.config_data.aws.allowed_ips
   }
 
   ingress {

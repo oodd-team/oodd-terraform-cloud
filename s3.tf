@@ -101,7 +101,6 @@ resource "aws_s3_bucket_policy" "dev_bucket_policy" {
   bucket = aws_s3_bucket.frontend_dev_bucket.id
   policy = <<POLICY
 {
-  "Id": "Policy1728830219292",
   "Version": "2012-10-17",
   "Statement": [
     {

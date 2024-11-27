@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "frontend_prod_cf" {
   comment             = "oodd prod cloudfront distribution"
   default_root_object = "index.html"
 
-  aliases = ["oodd.today", "www.oodd.today"]
+  # aliases = ["oodd.today"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -55,7 +55,7 @@ resource "aws_cloudfront_distribution" "frontend_prod_cf" {
   viewer_certificate {
     acm_certificate_arn      = data.aws_acm_certificate.prod_cert.arn
     ssl_support_method       = "sni-only"     # SNI 기반 SSL 인증서 사용
-    minimum_protocol_version = "TLSv1.2_2018" # 최소 SSL/TLS 버전
+    minimum_protocol_version = "TLSv1.2_2021" # 최소 SSL/TLS 버전
   }
   tags = {
     Name        = "prod-cloudfront"
@@ -75,7 +75,7 @@ resource "aws_cloudfront_distribution" "frontend_dev_cf" {
   comment             = "oodd dev cloudfront distribution"
   default_root_object = "index.html"
 
-  aliases = ["dev.oodd.today"]
+  # aliases = ["dev.oodd.today"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "frontend_dev_cf" {
   viewer_certificate {
     acm_certificate_arn      = data.aws_acm_certificate.prod_cert.arn
     ssl_support_method       = "sni-only"     # SNI 기반 SSL 인증서 사용
-    minimum_protocol_version = "TLSv1.2_2018" # 최소 SSL/TLS 버전
+    minimum_protocol_version = "TLSv1.2_2021" # 최소 SSL/TLS 버전
   }
   tags = {
     Name        = "dev-cloudfront"
