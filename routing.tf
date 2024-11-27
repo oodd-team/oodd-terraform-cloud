@@ -35,6 +35,20 @@ resource "aws_route53_record" "oodd_today" {
   depends_on = [aws_cloudfront_distribution.frontend_prod_cf]
 }
 
+resource "aws_route53_record" "dev_oodd_today" {
+  name    = "dev.oodd.today"
+  zone_id = data.aws_route53_zone.prod_zone.zone_id
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.frontend_dev_cf.domain_name
+    zone_id                = aws_cloudfront_distribution.frontend_dev_cf.hosted_zone_id
+    evaluate_target_health = true
+  }
+
+  depends_on = [aws_cloudfront_distribution.frontend_dev_cf]
+}
+
 # Route53에 서브도메인 레코드 생성: api.oodd.today
 resource "aws_route53_record" "api_record" {
   zone_id = data.aws_route53_zone.prod_zone.zone_id
