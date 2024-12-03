@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "frontend_prod_cf" {
   comment             = "oodd prod cloudfront distribution"
   default_root_object = "index.html"
 
-  # aliases = ["oodd.today"]
+  aliases = ["oodd.today", "www.oodd.today"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -75,7 +75,7 @@ resource "aws_cloudfront_distribution" "frontend_dev_cf" {
   comment             = "oodd dev cloudfront distribution"
   default_root_object = "index.html"
 
-  # aliases = ["dev.oodd.today"]
+  aliases = ["dev.oodd.today"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]

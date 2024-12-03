@@ -10,6 +10,6 @@ resource "aws_instance" "nestjs_instance" {
   }
   tags = {
     Name        = "oodd-instance"
-    Environment = var.environment
+    Environment = "dev"
   }
 }
