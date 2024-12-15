@@ -5,7 +5,7 @@ resource "aws_db_instance" "oodd_db" {
   allocated_storage   = 20
   engine              = "mysql"
   username            = "root"
-  publicly_accessible = false
+  publicly_accessible = true
   password            = local.config_data.aws.db_password
 
 
