@@ -19,17 +19,17 @@ output "cloudfront_ips" {
 }
 
 # dev 환경 보안 그룹 생성
-resource "aws_security_group" "dev_sg" {
-  name        = "${var.app_name}-dev-sg"
+resource "aws_security_group" "dev_ec2_sg" {
+  name = "${var.app_name}-dev-ec2-sg"
   description = "Security group for dev environment"
-  vpc_id      = data.aws_vpc.default.id
-
+  vpc_id = data.aws_vpc.default.id
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"] # 모든 아웃바운드 허용
-  }
+  } 
+
 
   ingress {
     from_port   = 80
@@ -46,17 +46,34 @@ resource "aws_security_group" "dev_sg" {
   }
 
   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = local.config_data.aws.allowed_ips
+  }
+}
+resource "aws_security_group" "dev_rds_sg" {
+  name        = "${var.app_name}-dev-rds-sg"
+  description = "Security group for dev environment"
+  vpc_id      = data.aws_vpc.default.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"] # 모든 아웃바운드 허용
+  }
+  ingress {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = local.config_data.aws.allowed_ips
   }
-
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = local.config_data.aws.allowed_ips
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    security_groups = [aws_security_group.dev_ec2_sg.id]
   }
 }
 

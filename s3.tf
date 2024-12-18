@@ -155,26 +155,26 @@ resource "aws_s3_bucket_acl" "frontend_dev_bucket_acl" {
   acl    = "public-read"
 }
 
-# Server S3 Prod bucket
-resource "aws_s3_bucket" "prod_api_bucket" {
-  bucket = "oodd-prod-api-bucket"
+# Server S3 bucket
+resource "aws_s3_bucket" "api_bucket" {
+  bucket = "oodd-api-bucket"
 
   tags = {
-    Name        = "oodd-prod-api-bucket"
+    Name        = "oodd-api-bucket"
     Environment = "prod"
   }
 }
 
 
-resource "aws_s3_bucket_ownership_controls" "prod_api_bucket_ownership_controls" {
-  bucket = aws_s3_bucket.prod_api_bucket.id
+resource "aws_s3_bucket_ownership_controls" "api_bucket_ownership_controls" {
+  bucket = aws_s3_bucket.api_bucket.id
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "prod_api_bucket_public_access_block" {
-  bucket = aws_s3_bucket.prod_api_bucket.id
+resource "aws_s3_bucket_public_access_block" "api_bucket_public_access_block" {
+  bucket = aws_s3_bucket.api_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -183,50 +183,12 @@ resource "aws_s3_bucket_public_access_block" "prod_api_bucket_public_access_bloc
 }
 
 
-resource "aws_s3_bucket_acl" "prodapi_bucket_acl" {
+resource "aws_s3_bucket_acl" "api_bucket_acl" {
   depends_on = [
-    aws_s3_bucket_ownership_controls.prod_api_bucket_ownership_controls,
-    aws_s3_bucket_public_access_block.prod_api_bucket_public_access_block,
+    aws_s3_bucket_ownership_controls.api_bucket_ownership_controls,
+    aws_s3_bucket_public_access_block.api_bucket_public_access_block,
   ]
 
-  bucket = aws_s3_bucket.prod_api_bucket.id
-  acl    = "private"
-}
-
-# Server S3 Dev bucket
-resource "aws_s3_bucket" "dev_api_bucket" {
-  bucket = "oodd-dev-api-bucket"
-
-  tags = {
-    Name        = "oodd-dev-api-bucket"
-    Environment = "dev"
-  }
-}
-
-
-resource "aws_s3_bucket_ownership_controls" "dev_api_bucket_ownership_controls" {
-  bucket = aws_s3_bucket.dev_api_bucket.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "dev_api_bucket_public_access_block" {
-  bucket = aws_s3_bucket.dev_api_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-
-resource "aws_s3_bucket_acl" "dev_api_bucket_acl" {
-  depends_on = [
-    aws_s3_bucket_ownership_controls.dev_api_bucket_ownership_controls,
-    aws_s3_bucket_public_access_block.dev_api_bucket_public_access_block,
-  ]
-
-  bucket = aws_s3_bucket.dev_api_bucket.id
+  bucket = aws_s3_bucket.api_bucket.id
   acl    = "private"
 }
